@@ -6,22 +6,17 @@ class DataCombiner
 {
     protected $providers = [];
 
-    public function addProvider(JSONDataProvider $provider)
+    public function addProvider(DataProviderInterface $provider)
     {
         $this->providers[] = $provider;
     }
 
-    public function combineData()
+    public function combineData(array $filters): array
     {
-        $combinedData = [];
-
+        $results = [];
         foreach ($this->providers as $provider) {
-            $data = $provider->getData();
-            if ($data) {
-                $combinedData = array_merge($combinedData, $data);
-            }
+            $results = array_merge($results, $provider->getData($filters));
         }
-
-        return $combinedData;
+        return $results;
     }
 }
