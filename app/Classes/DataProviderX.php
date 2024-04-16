@@ -21,9 +21,16 @@ class DataProviderX implements DataProviderInterface {
             $filters['statusCode'] = $this->translateStatusCode($filters['statusCode']);
         }
 
+
         $data = json_decode(file_get_contents($this->filePath), true);
         return array_filter($data, function ($item) use ($filters) {
             foreach ($filters as $key => $value) {
+                if ($key === 'balanceMin' && $item['parentAmount'] < $value) {
+                    return false;
+                }
+                if ($key === 'balanceMax' && $item['parentAmount'] > $value) {
+                    return false;
+                }
                 if (isset($item[$key]) && $item[$key] != $value) {
                     return false;
                 }

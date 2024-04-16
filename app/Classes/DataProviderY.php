@@ -24,6 +24,12 @@ class DataProviderY implements DataProviderInterface {
         $data = json_decode(file_get_contents($this->filePath), true);
         return array_filter($data, function ($item) use ($filters) {
             foreach ($filters as $key => $value) {
+                if ($key === 'balanceMin' && $item['balance'] < $value) {
+                    return false;
+                }
+                if ($key === 'balanceMax' && $item['balance'] > $value) {
+                    return false;
+                }
                 if (isset($item[$key]) && $item[$key] != $value) {
                     return false;
                 }

@@ -19,6 +19,7 @@ switch ($request) {
         $filters = $_GET; // Assuming filters are passed through query parameters
         $users = $dataCombiner->combineData($filters);
 // Return JSON response
+        http_response_code(200);
         header('Content-Type: application/json');
         echo json_encode($users, JSON_PRETTY_PRINT);
 

@@ -14,8 +14,17 @@ class DataCombiner
     public function combineData(array $filters): array
     {
         $results = [];
+
+        // Extract provider filter if provided
+        $providerFilter = isset($filters['provider']) ? 'App\\Classes\\' . $filters['provider'] : null;
         foreach ($this->providers as $provider) {
-            $results = array_merge($results, $provider->getData($filters));
+            if ($providerFilter && $provider instanceof $providerFilter) {
+                $results = array_merge($results, $provider->getData($filters));
+            }
+            elseif (!$providerFilter) {
+                $results = array_merge($results, $provider->getData($filters));
+
+            }
         }
         return $results;
     }
